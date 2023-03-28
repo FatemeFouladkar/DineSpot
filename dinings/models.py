@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.gis.db import models as gis_models
-from django.utils.safestring import mark_safe
 
 from .utils import dining_image_upload_path
 
@@ -37,12 +36,3 @@ class Link(models.Model):
 class Image(models.Model):
     image = models.ImageField(upload_to=dining_image_upload_path)
     dining = models.ForeignKey(Dining, on_delete=models.CASCADE, related_name='images')
-
-
-    def image_tag(self):
-        if self.image:
-            return mark_safe(f'<img src="{self.image.url}" width="150" height="150" />')
-        else:
-            return "(No Image)"
-        
-    image_tag.short_description = "Image Preview"
