@@ -1,0 +1,18 @@
+
+<h2 class="dining-name">{{ dining.name }}</h2>
+<hr />
+<p>{{ dining.description }}</p>
+<p><b> Address: </b>{{ dining.address }}</p>
+<p><b> Phone Number: </b>{{ dining.phone_number }}</p>
+
+{% if dining.links.all %}
+    <div class="link-container">
+    <h4>Links:</h4>
+    <ul>
+        {% for link in dining.links.all %}
+        <li>{{link.key}}: <a href="{{ link.value }}">{{ link.value }}</a></li>
+        {% endfor %}
+    </ul>
+    </div>
+{% endif %}
+</div>
