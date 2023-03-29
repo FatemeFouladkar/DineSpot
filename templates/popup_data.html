@@ -1,18 +1,56 @@
+<haed>
 
-<h2 class="dining-name">{{ dining.name }}</h2>
-<hr />
-<p>{{ dining.description }}</p>
-<p><b> Address: </b>{{ dining.address }}</p>
-<p><b> Phone Number: </b>{{ dining.phone_number }}</p>
+    <style>
+        /* Image carousel styles */
+        .carousel-item img {
+        max-height: 500px;
+        margin: 0 auto;
+        }
+        
+        .carousel-control-prev, .carousel-control-next {
+        width: 5%;
+        filter: invert(100%);
+        }
+        
+        .carousel-indicators li {
+        width: 10px;
+        height: 10px;
+        margin: 0 5px;
+        border-radius: 50%;
+        background-color: #555;
+        border: none;
+        }
+        
+        .carousel-indicators li.active {
+        background-color: #f58220;
+        }
+        
+    </style>
 
-{% if dining.links.all %}
-    <div class="link-container">
-    <h4>Links:</h4>
-    <ul>
-        {% for link in dining.links.all %}
-        <li>{{link.key}}: <a href="{{ link.value }}">{{ link.value }}</a></li>
-        {% endfor %}
-    </ul>
+</head>
+
+<body>
+    <h2 class="dining-name">{{ dining.name }}</h2>
+    <hr />
+    <center>
+        <img width="250" src="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{{ dining.images.first.image.url }}" />
+    </center>
+
+    <br>
+    <p><b> Description: </b>{{ dining.description }}</p>
+    <p><b> Address: </b>{{ dining.address }}</p>
+    <p><b> Phone Number: </b>{{ dining.phone_number }}</p>
+
+    {% if dining.links.all %}
+        <div class="link-container">
+        <h4>Links:</h4>
+        <ul>
+            {% for link in dining.links.all %}
+            <li>{{link.key}}: <a href="{{ link.value }}">{{ link.value }}</a></li>
+            {% endfor %}
+        </ul>
+        </div>
+    {% endif %}
     </div>
-{% endif %}
-</div>
+
+</body>

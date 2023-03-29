@@ -6,9 +6,10 @@ import branca
 from .models import Dining, Link, Image
 
 
-def make_popup_data(dining):
+def make_popup_data(dining, request):
     context = {
-          'dining': dining
+          'dining': dining,
+          'request': request
     }
     return render_to_string('popup_data.html', context=context)
 

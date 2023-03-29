@@ -22,7 +22,7 @@ class MapView(TemplateView):
         map.add_to(figure)
         
         for dining in Dining.objects.all():
-            popup_data = make_popup_data(dining)
+            popup_data = make_popup_data(dining, self.request)
             make_markers_and_add_to_map(map, popup_data, dining)
 
         LocateControl().add_to(map)
