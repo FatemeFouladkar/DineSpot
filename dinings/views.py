@@ -17,7 +17,7 @@ class MapView(TemplateView):
             zoom_start = 13,
             tiles = 'OpenStreetMap',
             control_scale=True,
-            height='85%',
+            height='90%',
             max_bounds=True
         )
         map.add_to(figure)
