@@ -1,3 +1,6 @@
+{% load crispy_forms_tags %}
+
+
 <html>
     <head>
         <!-- Latest compiled and minified CSS -->
@@ -15,8 +18,9 @@
     </head>
 
     <body>
-        <form style="padding: 100px;">
-            <div class="form-group">
+        <form method="post" enctype="multipart/form-data" style="padding: 100px;">
+            {% csrf_token %}
+            {% comment %} <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="name" placeholder="Enter name">
             </div>
@@ -45,8 +49,28 @@
             <div class="form-group">
                 <label for="description">Description</label>
                 <textarea class="form-control" id="description" rows="3"></textarea>
-            </div>  
-            <a href="{% url 'map' %}" type="submit" class="back-link btn btn-primary">Submit</a>
+            </div>   {% endcomment %}
+            {{ form.non_form_errors }}
+            {{ form|crispy }}
+            <br>
+
+            {{ formset1.non_form_errors }}
+            {{ formset1.management_form}}
+
+            {{ formset2.non_form_errors }}
+            {{ formset2.management_form}}
+
+            {% for form in formset2.forms %}
+                {{ form|crispy }}
+                <br><br>
+            {% endfor %} 
+            
+            {% for form in formset1.forms %}
+                {{ form|crispy }}
+                <br><br>
+            {% endfor %} 
+            
+            <a href="{% url 'dinings:map' %}" type="submit" class="back-link btn btn-primary">Submit</a>
         </form>
     </body>
 
