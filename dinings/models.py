@@ -10,7 +10,8 @@ class Dining(models.Model):
     address = models.CharField(max_length=200, null=True, blank=True)
     phone_number = models.CharField(max_length=100, null=True, blank=True)
     location = gis_models.PointField(srid=4326, null=True, blank=True, default=Point(36.2971, 59.5953))
-    
+    confirmed = models.BooleanField(default=False)
+
     @property
     def latitude(self):
         return self.location.coords[1] if self.location else 36.2971

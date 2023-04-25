@@ -35,7 +35,6 @@ class CreateDining(SuccessMessageMixin, CreateView):
         return context
     
     def form_valid(self, form, formset1, formset2):
-
         with transaction.atomic():
             self.object = form.save()
 
@@ -49,11 +48,9 @@ class CreateDining(SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
     def form_invalid(self, form, formset1, formset2):
-
         return self.render_to_response(self.get_context_data(form=form, formset1=formset1, formset2=formset2))
 
     def post(self, request, *args, **kwargs):
-
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
@@ -82,7 +79,7 @@ class MapView(TemplateView):
         )
         map.add_to(figure)
         
-        for dining in Dining.objects.all():
+        for dining in Dining.objects.filter(confirmed=True):
             popup_data = make_popup_data(dining, self.request)
             make_markers_and_add_to_map(map, popup_data, dining)
 
