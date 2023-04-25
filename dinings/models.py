@@ -20,7 +20,7 @@ class Dining(models.Model):
         return self.location.coords[0] if self.location else 59.5953
     
     def __str__(self) -> str:
-        return self.name if self.name else self.pk
+        return str(self.name) if str(self.name) else int(self.pk)
     
 
 
@@ -30,7 +30,7 @@ class Link(models.Model):
     dining = models.ForeignKey(Dining, on_delete=models.CASCADE, related_name='links')
 
     def __str__(self) -> str:
-        return self.key if self.key else self.pk
+        return self.key if self.key else int(self.pk)
 
 
 class Image(models.Model):
