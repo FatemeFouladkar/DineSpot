@@ -1,6 +1,8 @@
 from django.views.generic import TemplateView, CreateView
 from django.urls import reverse_lazy
 from django.db import transaction
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 
 import folium
 from folium.plugins import LocateControl, Search
@@ -10,11 +12,17 @@ from .forms import DiningForm, ImageFormSet, LinkFormSet
 from .map_utils import make_markers_and_add_to_map, make_popup_data
 
 
-class CreateDining(CreateView):
+
+class CreateDining(SuccessMessageMixin, CreateView):
     template_name = 'add_new_dining_form.html'
     model = Dining
     form_class = DiningForm
-    success_url = reverse_lazy('dinings:map')
+    success_url = reverse_lazy('dinings:add-dining')
+    success_message = "Your request was sent successfully! We'll let you know when it's confirmed"
+   
+    def get_success_message(self, cleaned_data):
+        return messages.success(self.request, self.success_message, extra_tags='alert-success')
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -27,6 +35,7 @@ class CreateDining(CreateView):
         return context
     
     def form_valid(self, form, formset1, formset2):
+
         with transaction.atomic():
             self.object = form.save()
 
@@ -40,9 +49,11 @@ class CreateDining(CreateView):
         return super().form_valid(form)
 
     def form_invalid(self, form, formset1, formset2):
+
         return self.render_to_response(self.get_context_data(form=form, formset1=formset1, formset2=formset2))
 
     def post(self, request, *args, **kwargs):
+
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)

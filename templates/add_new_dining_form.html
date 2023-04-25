@@ -14,12 +14,23 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
         <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>   
     </head>
 
     <body>
         <form method="post" enctype="multipart/form-data" style="padding: 100px;">
             {% csrf_token %}
+            {% for message in messages %}
+                <div class="container-fluid p-0 success-message">
+                    <div class="text-center alert {{ message.tags }} alert-dismissible mx-2" role="alert" style="height:100px">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="True">&times;</span>
+                        </button>
+                        <b> {{ message }} </b>
+                    </div>
+                </div>
+            {% endfor %}
+            {{ field.errors }}
             {{ form.non_form_errors }}
             {{ form|crispy }}
             <br>
@@ -31,18 +42,23 @@
             {{ formset2.management_form}}
 
             {% for form in formset2.forms %}
+                {{ field.errors }}
+                {{ form.non_form_errors }}
                 {{ form|crispy }}
                 <br><br>
             {% endfor %} 
             
             {% for form in formset1.forms %}
+                {{ field.errors }}
+                {{ form.non_form_errors }}
                 {{ form|crispy }}
                 <br><br>
             {% endfor %} 
             
-            <button type="submit" class="btn btn-default">
-                <a href="#" > Submit</a>
+            <button formnovalidate type="submit" class="px-5 btn btn-success" name="submit" value="submit" action="">
+                Submit
             </button>
+
         </form>
     </body>
 
