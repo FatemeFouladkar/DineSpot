@@ -58,7 +58,6 @@ class CreateDining(SuccessMessageMixin, CreateView):
         formset2 = LinkFormSet(self.request.POST)
         
         if form.is_valid() and formset1.is_valid() and formset2.is_valid():
-            
             return self.form_valid(form, formset1, formset2)
         else:
             return self.form_invalid(form, formset1, formset2)
