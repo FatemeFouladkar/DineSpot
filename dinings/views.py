@@ -1,3 +1,4 @@
+import os
 from django.views.generic import TemplateView, CreateView
 from django.urls import reverse_lazy
 from django.db import transaction
@@ -5,8 +6,9 @@ from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 
 import folium
-from folium.plugins import LocateControl, Search
+from folium.plugins import LocateControl, MousePosition
 
+from DineSpot.settings import BASE_DIR
 from .models import Dining
 from .forms import DiningForm, ImageFormSet, LinkFormSet
 from .map_utils import make_markers_and_add_to_map, make_popup_data
@@ -70,20 +72,29 @@ class MapView(TemplateView):
         figure = folium.Figure()
         map = folium.Map(
             location = [36.2971, 59.5953],
-            zoom_start = 13,
+            zoom_start = 11,
             tiles = 'OpenStreetMap',
             control_scale=True,
             height='90%',
             max_bounds=True
         )
+
         map.add_to(figure)
         
+        folium.Choropleth(
+            geo_data=os.path.join(BASE_DIR, 'Mashhad.json'),
+            line_color='black',
+            fill_color='#B4B3B3',
+            line_wight=3,
+            fill_opacity=0.3
+        ).add_to(map)
+
         for dining in Dining.objects.filter(confirmed=True):
             popup_data = make_popup_data(dining, self.request)
             make_markers_and_add_to_map(map, popup_data, dining)
 
         LocateControl().add_to(map)
-
+        MousePosition().add_to(map)
         figure.render()
         return {"map": figure}
     
