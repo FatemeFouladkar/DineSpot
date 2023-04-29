@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.gis.db import models as gis_models
 from django.contrib.gis.geos import Point
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
@@ -27,7 +27,7 @@ class Dining(models.Model):
     
     def __str__(self) -> str:
         return str(self.name) if str(self.name) else int(self.pk)
-    
+
 
 @receiver(post_save, sender=Dining)
 def send_email_to_admin (sender, instance, created, **kwargs):
@@ -41,6 +41,19 @@ def send_email_to_admin (sender, instance, created, **kwargs):
         
         admins = list(get_user_model().objects.filter(is_superuser=True).values_list('email', flat=True))
         send_mail(subject, message, recipient_list=admins, from_email=None)
+
+
+@receiver(pre_save, sender=Dining)
+def send_email_to_dining_owner(sender, instance, **kwargs):
+    if instance.pk:
+        original_instance = sender.objects.get(pk=instance.pk)
+        email = instance.links.filter(key='Email').first().value
+        if email\
+            and not original_instance.confirmed and instance.confirmed\
+            and not instance._state.adding:
+            subject = "Your Dinings Spot Was Confirmed"
+            message = "The dining spot you requested for is confirmed and now you can visit in on the map."
+            send_mail(subject, message, recipient_list=[email], from_email=None)
 
 
 class Link(models.Model):
