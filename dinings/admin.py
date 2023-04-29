@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.gis.admin import GISModelAdmin
 from django.utils.safestring import mark_safe
 
@@ -25,7 +25,7 @@ class ImageInline(admin.TabularInline):
 class DiningAdmin(GISModelAdmin):
     list_display = [field.name for field in Dining._meta.fields]
     inlines = [LinkInline, ImageInline]
-
+    actions = ('confirm', )
 
     gis_widget_kwargs = {
             'attrs': {
@@ -34,3 +34,12 @@ class DiningAdmin(GISModelAdmin):
                 'default_lon': 59.5953,
             },
         }
+
+
+    @admin.action(description="Confirm selected dinings")
+    def confirm(modeladmin, request, queryset):
+        for obj in queryset:
+            obj.confirmed = True
+            obj.save()
+            messages.success(request, "Successfully confirmed the selected dinings")
+            
