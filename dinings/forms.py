@@ -1,4 +1,5 @@
 from django import forms 
+from django.core.validators import URLValidator, EmailValidator
 
 from .models import Dining, Link, Image
 
@@ -24,15 +25,20 @@ class LinkFormSet(forms.BaseInlineFormSet):
                 form.fields['key'].initial = 'Email' 
                 form.fields['value'].label = 'Email' 
                 form.fields['value'].help_text = 'Fill out this field to be informed when your dining spot in confirmed'
+                form.fields['value'].validators = [EmailValidator()]
             elif i == 1: 
                 form.fields['key'].initial = 'Instagram' 
                 form.fields['value'].label = 'Instagram' 
             else: 
                 form.fields['key'].initial = 'Website' 
                 form.fields['value'].label = 'Website' 
+                form.fields['value'].validators = [URLValidator()]    
 
 
-ImageFormSet = forms.inlineformset_factory(Dining, Image, fields=('image', ), extra=1, can_delete=False)
-LinkFormSet = forms.inlineformset_factory(Dining, Link, formset=LinkFormSet, fields=('key', 'value' ), extra=3, can_delete=False, widgets={ 'key': forms.HiddenInput()})
+ImageFormSet = forms.inlineformset_factory(Dining, Image, fields=('image',),
+                                           extra=1, can_delete=False)
+LinkFormSet = forms.inlineformset_factory(Dining, Link, formset=LinkFormSet, fields=('key', 'value'),
+                                         extra=3, can_delete=False,
+                                         widgets={ 'key': forms.HiddenInput()})
 
 
