@@ -14,16 +14,16 @@ class Dining(models.Model):
     description = models.TextField(null=True, blank=True)
     address = models.CharField(max_length=200, null=True, blank=True)
     phone_number = models.CharField(max_length=100, null=True, blank=True)
-    location = gis_models.PointField(srid=4326, null=True, blank=True, default=Point(36.2971, 59.5953))
+    location = gis_models.PointField(srid=4326, null=True, blank=True, default=Point(59.60289001464844, 36.30073854794734), help_text="Fix the location before confirming")
     confirmed = models.BooleanField(default=False)
 
     @property
     def latitude(self):
-        return self.location.coords[1] if self.location else 36.2971
+        return self.location.coords[1] if self.location else 36.30073854794734
 
     @property
     def longitude(self):
-        return self.location.coords[0] if self.location else 59.5953
+        return self.location.coords[0] if self.location else 59.60289001464844
     
     def __str__(self) -> str:
         return str(self.name) if str(self.name) else int(self.pk)
@@ -47,8 +47,8 @@ def send_email_to_admin (sender, instance, created, **kwargs):
 def send_email_to_dining_owner(sender, instance, **kwargs):
     if instance.pk:
         original_instance = sender.objects.get(pk=instance.pk)
-        email = instance.links.filter(key='Email').first().value
-        if email\
+        email = instance.links.filter(key='Email').first()
+        if email and email.value\
             and not original_instance.confirmed and instance.confirmed\
             and not instance._state.adding:
             subject = "Your Dinings Spot Was Confirmed"

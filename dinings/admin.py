@@ -27,15 +27,6 @@ class DiningAdmin(GISModelAdmin):
     inlines = [LinkInline, ImageInline]
     actions = ('confirm', )
 
-    gis_widget_kwargs = {
-            'attrs': {
-                'default_zoom': 11,
-                'default_lat': 36.2971,
-                'default_lon': 59.5953,
-            },
-        }
-
-
     @admin.action(description="Confirm selected dinings")
     def confirm(modeladmin, request, queryset):
         for obj in queryset:
@@ -43,3 +34,10 @@ class DiningAdmin(GISModelAdmin):
             obj.save()
             messages.success(request, "Successfully confirmed the selected dinings")
             
+    gis_widget_kwargs = {
+            'attrs': {
+                'default_zoom': 1,
+                'default_lat': 36.30073854794734,
+                'default_lon': 59.60289001464844,
+            },
+        }
