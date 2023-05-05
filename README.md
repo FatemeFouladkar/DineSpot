@@ -6,6 +6,7 @@
 A small project using [Django](!https://www.djangoproject.com/) and [Folium](!https://python-visualization.github.io/folium/). 
 
 In DineSpot, users can view all the dining spots in Mashhad along with their details. Also the owners of dining spots can request adding their own place via a Django form. 
+* For more info on integrating Django with Folium, check out [this article](!https://medium.com/@FatemeFouladkar/how-i-integrated-folium-with-django-d04dc5b25048)
 
 ## How to run the project
 DineSpot is dockerized, so the only thing you will need is docker and docker-compose. In order to start the project just follow these steps:
